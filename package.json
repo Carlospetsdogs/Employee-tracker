@@ -1,0 +1,19 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "## Usage  The purpose of this application is to allow users of a company to manage their employees databases.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Carlospetsdogs/Employee-tracker.git"
+  },
+  "author": "Carlos J Ruiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Carlospetsdogs/Employee-tracker/issues"
+  },
+  "homepage": "https://github.com/Carlospetsdogs/Employee-tracker#readme"
+}
