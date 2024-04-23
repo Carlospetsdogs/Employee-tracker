@@ -103,20 +103,54 @@ function promptUser() {
 // function to view all departments
 function viewDepartments() {
     connection.query('SELECT * FROM departments', (err, res) => {
-      if (err) throw err;
-      console.table(res);
-      promptUser();
+        if (err) throw err;
+        console.table(res);
+        promptUser();
     });
-  }
+}
 
 // function to view all roles
 function viewRoles() {
     connection.query('SELECT * FROM roles', (err, res) => {
-      if (err) throw err;
-      console.table(res);
-      promptUser();
+        if (err) throw err;
+        console.table(res);
+        promptUser();
     });
-  }
+}
 
+// function to view all employees
+function viewEmployees() {
+    connection.query('SELECT * FROM employees', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        promptUser();
+    });
+}
 
+// View all employees that belong to a department
+function viewEmployeesByDepartment() {
+    db.findAllDepartments()
+      .then(([rows]) => {
+        let departments = rows;
+        const departmentChoices = departments.map(({ id, name }) => ({
+          name: name,
+          value: id
+        }));
   
+        prompt([
+          {
+            type: "list",
+            name: "departmentId",
+            message: "Which department would you like to see employees for?",
+            choices: departmentChoices
+          }
+        ])
+          .then(res => db.findAllEmployeesByDepartment(res.departmentId))
+          .then(([rows]) => {
+            let employees = rows;
+            console.log("\n");
+            console.table(employees);
+          })
+          .then(() => promptUser())
+      });
+  }
