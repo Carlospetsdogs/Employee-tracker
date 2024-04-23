@@ -99,3 +99,24 @@ function promptUser() {
         }
     });
 }
+
+// function to view all departments
+function viewDepartments() {
+    connection.query('SELECT * FROM departments', (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      promptUser();
+    });
+  }
+
+// function to view all roles
+function viewRoles() {
+    connection.query('SELECT * FROM roles', (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      promptUser();
+    });
+  }
+
+
+  
