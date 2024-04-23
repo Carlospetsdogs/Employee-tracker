@@ -37,13 +37,19 @@ function promptUser() {
             'View all employees by Department',
             'View all employees by Manager',
             'Add a department',
+            'Remove department',
             'Add a role',
+            'Remove role',
             'Add an employee',
+            'Remove an employee',
             'Update an employee role',
+            'Update employee Manager',
+            'View budget by department',
             'Exit'
         ]
     }).then(answer => {
         switch (answer.option) {
+            // calls function based on users choice
             case 'View all departments':
                 viewDepartments();
                 break;
@@ -62,17 +68,32 @@ function promptUser() {
             case 'Add a department':
                 addDepartment();
                 break;
+            case 'Remove a department':
+                removeDepartment();
+                break;
             case 'Add a role':
                 addRole();
+                break;
+            case 'Remove role':
+                removeRole();
                 break;
             case 'Add an employee':
                 addEmployee();
                 break;
+            case 'Remove an employee':
+                removeEmployee();
+                break;
             case 'Update an employee role':
                 updateEmployeeRole();
                 break;
+            case 'Update employee Manager':
+                updateEmployeeManager();
+                break;
+            case 'View budget by department':
+                viewBudgetByDepartment();
+                break;
             case 'Exit':
-                console.log('Goodbye!');
+                console.log('See you later!');
                 connection.end();
                 break;
         }
