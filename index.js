@@ -23,3 +23,55 @@ function startApp() {
   
     console.log(logoText);
   }
+
+// function to prompt the user with options
+function promptUser() {
+    inquirer.prompt({
+      type: 'list',
+      name: 'option',
+      message: 'What would you like to do?',
+      choices: [
+        'View all departments',
+        'View all roles',
+        'View all employees',
+        'View all employees by Department',
+        'Add a department',
+        'Add a role',
+        'Add an employee',
+        'Update an employee role',
+        'Exit'
+      ]
+    }).then(answer => {
+      switch (answer.option) {
+        case 'View all departments':
+          viewDepartments();
+          break;
+        case 'View all roles':
+          viewRoles();
+          break;
+        case 'View all employees':
+          viewEmployees();
+          break;
+        case 'View all employees by Dapartment':
+          viewEmployeesByDepartment();
+          break;
+        case 'Add a department':
+          addDepartment();
+          break;
+        case 'Add a role':
+          addRole();
+          break;
+        case 'Add an employee':
+          addEmployee();
+          break;
+        case 'Update an employee role':
+          updateEmployeeRole();
+          break;
+        case 'Exit':
+          console.log('Goodbye!');
+          connection.end();
+          break;
+      }
+    });
+  }
+  
