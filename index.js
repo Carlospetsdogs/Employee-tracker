@@ -252,3 +252,10 @@ function updateEmployeeRole() {
         });
     });
 }
+
+// connect to the MySQL database and start the application
+connection.connect(err => {
+    if (err) throw err;
+    console.log('Connected to the database!');
+    startApp();
+  });
