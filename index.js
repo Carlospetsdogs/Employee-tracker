@@ -130,60 +130,87 @@ function viewEmployees() {
 // function to view employess by their departments****
 function viewEmployeesByDepartment() {
     db.findAllDepartments()
-      .then(([rows]) => {
-        let departments = rows;
-        const departmentChoices = departments.map(({ id, name }) => ({
-          name: name,
-          value: id
-        }));
-  
-        prompt([
-          {
-            type: "list",
-            name: "departmentId",
-            message: "Which department would you like to see employees for?",
-            choices: departmentChoices
-          }
-        ])
-          .then(res => db.findAllEmployeesByDepartment(res.departmentId))
-          .then(([rows]) => {
-            let employees = rows;
-            console.log("\n");
-            console.table(employees);
-          })
-          .then(() => promptUser())
-      });
-  }
+        .then(([rows]) => {
+            let departments = rows;
+            const departmentChoices = departments.map(({ id, name }) => ({
+                name: name,
+                value: id
+            }));
+
+            prompt([
+                {
+                    type: "list",
+                    name: "departmentId",
+                    message: "Which department would you like to see employees for?",
+                    choices: departmentChoices
+                }
+            ])
+                .then(res => db.findAllEmployeesByDepartment(res.departmentId))
+                .then(([rows]) => {
+                    let employees = rows;
+                    console.log("\n");
+                    console.table(employees);
+                })
+                .then(() => promptUser())
+        });
+}
 
 
 // function to view employess by a speicified manager
-  function viewEmployeesByManager() {
+function viewEmployeesByManager() {
     db.findAllEmployees()
-      .then(([rows]) => {
-        let managers = rows;
-        const managerChoices = managers.map(({ id, first_name, last_name }) => ({
-          name: `${first_name} ${last_name}`,
-          value: id
-        }));
-  
-        prompt([
-          {
-            type: "list",
-            name: "managerId",
-            message: "Which employee do you want to see direct reports for?",
-            choices: managerChoices
-          }
-        ])
-          .then(res => db.findAllEmployeesByManager(res.managerId))
-          .then(([rows]) => {
+        .then(([rows]) => {
+            let managers = rows;
+            const managerChoices = managers.map(({ id, first_name, last_name }) => ({
+                name: `${first_name} ${last_name}`,
+                value: id
+            }));
+
+            prompt([
+                {
+                    type: "list",
+                    name: "managerId",
+                    message: "Which employee do you want to see direct reports for?",
+                    choices: managerChoices
+                }
+            ])
+                .then(res => db.findAllEmployeesByManager(res.managerId))
+                .then(([rows]) => {
+                    let employees = rows;
+                    console.log("\n");
+                    if (employees.length === 0) {
+                        console.log("The selected employee has no direct reports");
+                    } else {
+                        console.table(employees);
+                    }
+                })
+                .then(() => promptUser())
+        });
+}
+
+// function to remove a specified employee
+function removeEmployee() {
+    db.findAllEmployees()
+        .then(([rows]) => {
             let employees = rows;
-            console.log("\n");
-            if (employees.length === 0) {
-              console.log("The selected employee has no direct reports");
-            } else {
-              console.table(employees);
-            }
-          })
-          .then(() => promptUser())
-      });
-  }
+            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+                name: `${first_name} ${last_name}`,
+                value: id
+            }));
+
+            prompt([
+                {
+                    type: "list",
+                    name: "employeeId",
+                    message: "Which employee do you want to remove?",
+                    choices: employeeChoices
+                }
+            ])
+                .then(res => db.removeEmployee(res.employeeId))
+                .then(() => console.log("Removed employee from the database"))
+                .then(() => promptUser())
+        })
+}
+
+
+
