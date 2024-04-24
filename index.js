@@ -1,5 +1,7 @@
-const { prompt } = require('inquirer');
-const mysql = require('mysql');
+const {prompt } = require('inquirer');
+const mysql = require('mysql2');
+const logo = require("asciiart-logo");
+
 
 init();
 
@@ -12,7 +14,6 @@ const connection = mysql.createConnection({
     database: 'employee_db'
 });
 
-//connect app
 
 // start the application
 function startApp() {
@@ -28,7 +29,7 @@ function init() {
 
 // function to prompt the user with options
 function promptUser() {
-    inquirer.prompt({
+   prompt({
         type: 'list',
         name: 'option',
         message: 'What would you like to do?',
@@ -76,7 +77,7 @@ function promptUser() {
 
 // function to view all departments
 function viewDepartments() {
-    connection.query('SELECT * FROM departments', (err, res) => {
+    connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.table(res);
         promptUser();
@@ -85,7 +86,7 @@ function viewDepartments() {
 
 // function to view all roles
 function viewRoles() {
-    connection.query('SELECT * FROM roles', (err, res) => {
+    connection.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         console.table(res);
         promptUser();
@@ -94,7 +95,7 @@ function viewRoles() {
 
 // function to view all employees
 function viewEmployees() {
-    connection.query('SELECT * FROM employees', (err, res) => {
+    connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         console.table(res);
         promptUser();
@@ -147,7 +148,7 @@ function updateEmployeeRole() {
 
 // function to add a department
 function addDepartment() {
-    inquirer.prompt({
+   prompt({
         type: 'input',
         name: 'name',
         message: 'Enter the name of the department:'
@@ -163,7 +164,7 @@ function addDepartment() {
 
 // function to add a role
 function addRole() {
-    inquirer.prompt([
+   prompt([
         {
             type: 'input',
             name: 'title',
@@ -190,7 +191,7 @@ function addRole() {
 
 // function to add an employee 
 function addEmployee() {
-    inquirer.prompt([
+    prompt([
         {
             type: 'input',
             name: 'first_name',
@@ -226,7 +227,7 @@ function updateEmployeeRole() {
     connection.query('SELECT * FROM employees', (err, employees) => {
         if (err) throw err;
 
-        inquirer.prompt({
+        prompt({
             type: 'list',
             name: 'employeeId',
             message: 'Select an employee to update:',
