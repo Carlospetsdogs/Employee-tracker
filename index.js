@@ -270,3 +270,31 @@ function addDepartment() {
       });
     });
   }
+
+
+// function to add a role
+  function addRole() {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'title',
+        message: 'Enter the title of the role:'
+      },
+      {
+        type: 'input',
+        name: 'salary',
+        message: 'Enter the salary for the role:'
+      },
+      {
+        type: 'input',
+        name: 'department_id',
+        message: 'Enter the department ID for the role:'
+      }
+    ]).then(answers => {
+      connection.query('INSERT INTO roles SET ?', answers, (err, res) => {
+        if (err) throw err;
+        console.log('Role added successfully!');
+        promptUser();
+      });
+    });
+  }
