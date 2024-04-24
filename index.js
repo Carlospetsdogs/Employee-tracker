@@ -7,9 +7,9 @@ init();
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
-    user: 'your_username',
-    password: 'your_password',
-    database: 'your_database'
+    user: 'root',
+    password: '12345678',
+    database: 'employee_db'
 });
 
 //connect app
