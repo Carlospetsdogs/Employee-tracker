@@ -34,17 +34,10 @@ function promptUser() {
             'View all departments',
             'View all roles',
             'View all employees',
-            'View all employees by Department',
-            'View all employees by Manager',
             'Add a department',
-            'Remove department',
             'Add a role',
-            'Remove role',
             'Add an employee',
-            'Remove an employee',
             'Update an employee role',
-            'Update employee Manager',
-            'View budget by department',
             'Exit'
         ]
     }).then(answer => {
@@ -59,38 +52,17 @@ function promptUser() {
             case 'View all employees':
                 viewEmployees();
                 break;
-            case 'View all employees by Dapartment':
-                viewEmployeesByDepartment();
-                break;
-            case 'View all employees by Manager':
-                viewEmployeesByManager();
-                break;
             case 'Add a department':
                 addDepartment();
-                break;
-            case 'Remove a department':
-                removeDepartment();
                 break;
             case 'Add a role':
                 addRole();
                 break;
-            case 'Remove role':
-                removeRole();
-                break;
             case 'Add an employee':
                 addEmployee();
                 break;
-            case 'Remove an employee':
-                removeEmployee();
-                break;
             case 'Update an employee role':
                 updateEmployeeRole();
-                break;
-            case 'Update employee Manager':
-                updateEmployeeManager();
-                break;
-            case 'View budget by department':
-                viewBudgetByDepartment();
                 break;
             case 'Exit':
                 console.log('See you later!');
@@ -125,91 +97,6 @@ function viewEmployees() {
         console.table(res);
         promptUser();
     });
-}
-
-// function to view employess by their departments****
-function viewEmployeesByDepartment() {
-    db.findAllDepartments()
-        .then(([rows]) => {
-            let departments = rows;
-            const departmentChoices = departments.map(({ id, name }) => ({
-                name: name,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "departmentId",
-                    message: "Which department would you like to see employees for?",
-                    choices: departmentChoices
-                }
-            ])
-                .then(res => db.findAllEmployeesByDepartment(res.departmentId))
-                .then(([rows]) => {
-                    let employees = rows;
-                    console.log("\n");
-                    console.table(employees);
-                })
-                .then(() => promptUser())
-        });
-}
-
-
-// function to view employess by a speicified manager
-function viewEmployeesByManager() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let managers = rows;
-            const managerChoices = managers.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "managerId",
-                    message: "Which employee do you want to see direct reports for?",
-                    choices: managerChoices
-                }
-            ])
-                .then(res => db.findAllEmployeesByManager(res.managerId))
-                .then(([rows]) => {
-                    let employees = rows;
-                    console.log("\n");
-                    if (employees.length === 0) {
-                        console.log("The selected employee has no direct reports");
-                    } else {
-                        console.table(employees);
-                    }
-                })
-                .then(() => promptUser())
-        });
-}
-
-// function to remove a specified employee
-function removeEmployee() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let employees = rows;
-            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "employeeId",
-                    message: "Which employee do you want to remove?",
-                    choices: employeeChoices
-                }
-            ])
-                .then(res => db.removeEmployee(res.employeeId))
-                .then(() => console.log("Removed employee from the database"))
-                .then(() => promptUser())
-        })
 }
 
 // function to update a specified employees role

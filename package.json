@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Carlospetsdogs/Employee-tracker/issues"
   },
-  "homepage": "https://github.com/Carlospetsdogs/Employee-tracker#readme"
+  "homepage": "https://github.com/Carlospetsdogs/Employee-tracker#readme",
+  "dependencies": {
+    "mysql2": "^3.9.7"
+  }
 }
