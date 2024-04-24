@@ -12,6 +12,8 @@ const connection = mysql.createConnection({
     database: 'your_database'
 });
 
+//connect app
+
 // start the application
 function startApp() {
     console.log('Welcome to Employee Management System!');
