@@ -298,3 +298,36 @@ function addDepartment() {
       });
     });
   }
+
+// function to add an employee 
+function addEmployee() {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'first_name',
+        message: "Enter the employee's first name:"
+      },
+      {
+        type: 'input',
+        name: 'last_name',
+        message: "Enter the employee's last name:"
+      },
+      {
+        type: 'input',
+        name: 'role_id',
+        message: "Enter the employee's role ID:"
+      },
+      {
+        type: 'input',
+        name: 'manager_id',
+        message: "Enter the employee's manager ID:"
+      }
+    ]).then(answers => {
+      connection.query('INSERT INTO employees SET ?', answers, (err, res) => {
+        if (err) throw err;
+        console.log('Employee added successfully!');
+        promptUser();
+      });
+    });
+  }
+  
