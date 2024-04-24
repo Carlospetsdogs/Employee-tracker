@@ -256,3 +256,17 @@ function updateEmployeeRole() {
       })
   }
 
+// function to add a department
+function addDepartment() {
+    inquirer.prompt({
+      type: 'input',
+      name: 'name',
+      message: 'Enter the name of the department:'
+    }).then(answer => {
+      connection.query('INSERT INTO departments SET ?', { name: answer.name }, (err, res) => {
+        if (err) throw err;
+        console.log('Department added successfully!');
+        promptUser();
+      });
+    });
+  }
