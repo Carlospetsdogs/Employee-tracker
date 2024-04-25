@@ -169,7 +169,7 @@ function addEmployee() {
             message: "Enter the employee's manager ID:"
         }
     ]).then(answers => {
-        connection.query('INSERT INTO employees SET ?', answers, (err, res) => {
+        connection.query('INSERT INTO employee SET ?', answers, (err, res) => {
             if (err) throw err;
             console.log('Employee added successfully!');
             promptUser();
@@ -177,6 +177,7 @@ function addEmployee() {
     });
 }
 
+// update employee role
 async function updateEmployeeRole() {
     try {
         // Fetch employees from the database
@@ -218,7 +219,7 @@ async function updateEmployeeRole() {
         // Update the employee's role in the database
         const updateResult = await new Promise((resolve, reject) => {
             connection.query(
-                'UPDATE employees SET role_id = ? WHERE id = ?',
+                'UPDATE employee SET role_id = ? WHERE id = ?',
                 [newRoleId, employeeId],
                 (err, result) => {
                     if (err) reject(err);
