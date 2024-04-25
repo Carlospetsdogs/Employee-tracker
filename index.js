@@ -177,21 +177,30 @@ function addEmployee() {
     });
 }
 
-// function to update an employee role
 async function updateEmployeeRole() {
     try {
+        // Fetch employees from the database
         const employees = await new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM employee', (err, employee) => {
+            connection.query('SELECT * FROM employee', (err, rows) => {
                 if (err) reject(err);
-                resolve(employee);
+                resolve(rows);
             });
         });
 
-        const employeeChoices = employee.map(employee => ({
-            name: `${employee.first_name} ${employee.last_name}`,
-            value: employee.id
+        // Check if there are employees in the database
+        if (employees.length === 0) {
+            console.log("No employees found.");
+            promptUser();
+            return;
+        }
+
+        // Create choices for the employee selection prompt
+        const employeeChoices = employees.map(emp => ({
+            name: `${emp.first_name} ${emp.last_name}`,
+            value: emp.id
         }));
 
+        // Prompt the user to select an employee to update
         const { employeeId } = await prompt({
             type: 'list',
             name: 'employeeId',
@@ -199,6 +208,7 @@ async function updateEmployeeRole() {
             choices: employeeChoices
         });
 
+        // Prompt the user to enter the new role ID
         const { newRoleId } = await prompt({
             type: 'input',
             name: 'newRoleId',
@@ -206,17 +216,23 @@ async function updateEmployeeRole() {
         });
 
         // Update the employee's role in the database
-        await new Promise((resolve, reject) => {
+        const updateResult = await new Promise((resolve, reject) => {
             connection.query(
                 'UPDATE employees SET role_id = ? WHERE id = ?',
                 [newRoleId, employeeId],
-                (err, res) => {
+                (err, result) => {
                     if (err) reject(err);
-                    console.log('Employee role updated successfully!');
-                    resolve();
+                    resolve(result);
                 }
             );
         });
+
+        // Check if the update was successful
+        if (updateResult.affectedRows > 0) {
+            console.log('Employee role updated successfully!');
+        } else {
+            console.log('No employee found with the provided ID.');
+        }
 
         // Prompt the user with the main options again
         promptUser();
