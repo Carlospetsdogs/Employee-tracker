@@ -1,12 +1,12 @@
-const {prompt } = require('inquirer');
-const mysql = require('mysql2');
+const { prompt } = require('inquirer');
+const mysql2 = require('mysql2');
 const logo = require("asciiart-logo");
 
 
 init();
 
 // create a connection to the MySQL database
-const connection = mysql.createConnection({
+const connection = mysql2.createConnection({
     host: 'localhost',
     port: 3306,
     user: 'root',
@@ -29,7 +29,7 @@ function init() {
 
 // function to prompt the user with options
 function promptUser() {
-   prompt({
+    prompt({
         type: 'list',
         name: 'option',
         message: 'What would you like to do?',
@@ -102,53 +102,9 @@ function viewEmployees() {
     });
 }
 
-// function to update a specified employees role
-function updateEmployeeRole() {
-    db.findAllEmployees()
-        .then(([rows]) => {
-            let employees = rows;
-            const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
-                name: `${first_name} ${last_name}`,
-                value: id
-            }));
-
-            prompt([
-                {
-                    type: "list",
-                    name: "employeeId",
-                    message: "Which employee's role do you want to update?",
-                    choices: employeeChoices
-                }
-            ])
-                .then(res => {
-                    let employeeId = res.employeeId;
-                    db.findAllRoles()
-                        .then(([rows]) => {
-                            let roles = rows;
-                            const roleChoices = roles.map(({ id, title }) => ({
-                                name: title,
-                                value: id
-                            }));
-
-                            prompt([
-                                {
-                                    type: "list",
-                                    name: "roleId",
-                                    message: "Which role do you want to assign the selected employee?",
-                                    choices: roleChoices
-                                }
-                            ])
-                                .then(res => db.updateEmployeeRole(employeeId, res.roleId))
-                                .then(() => console.log("Updated employee's role"))
-                                .then(() => promptUser())
-                        });
-                });
-        })
-}
-
 // function to add a department
 function addDepartment() {
-   prompt({
+    prompt({
         type: 'input',
         name: 'name',
         message: 'Enter the name of the department:'
@@ -164,7 +120,7 @@ function addDepartment() {
 
 // function to add a role
 function addRole() {
-   prompt([
+    prompt([
         {
             type: 'input',
             name: 'title',
@@ -222,43 +178,57 @@ function addEmployee() {
 }
 
 // function to update an employee role
-function updateEmployeeRole() {
+async function updateEmployeeRole() {
+    try {
+        const employees = await new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM employee', (err, employee) => {
+                if (err) reject(err);
+                resolve(employee);
+            });
+        });
 
-    connection.query('SELECT * FROM employees', (err, employees) => {
-        if (err) throw err;
+        const employeeChoices = employee.map(employee => ({
+            name: `${employee.first_name} ${employee.last_name}`,
+            value: employee.id
+        }));
 
-        prompt({
+        const { employeeId } = await prompt({
             type: 'list',
             name: 'employeeId',
             message: 'Select an employee to update:',
-            choices: employees.map(employee => ({
-                name: `${employee.first_name} ${employee.last_name}`,
-                value: employee.id
-            }))
-        }).then(answer => {
-            inquirer.prompt({
-                type: 'input',
-                name: 'newRoleId',
-                message: 'Enter the new role ID for the employee:'
-            }).then(answer => {
-                // update the employee's role in the database
-                connection.query(
-                    'UPDATE employees SET role_id = ? WHERE id = ?',
-                    [answer.newRoleId, answer.employeeId],
-                    (err, res) => {
-                        if (err) throw err;
-                        console.log('Employee role updated successfully!');
-                        promptUser();
-                    }
-                );
-            });
+            choices: employeeChoices
         });
-    });
+
+        const { newRoleId } = await prompt({
+            type: 'input',
+            name: 'newRoleId',
+            message: 'Enter the new role ID for the employee:'
+        });
+
+        // Update the employee's role in the database
+        await new Promise((resolve, reject) => {
+            connection.query(
+                'UPDATE employees SET role_id = ? WHERE id = ?',
+                [newRoleId, employeeId],
+                (err, res) => {
+                    if (err) reject(err);
+                    console.log('Employee role updated successfully!');
+                    resolve();
+                }
+            );
+        });
+
+        // Prompt the user with the main options again
+        promptUser();
+    } catch (err) {
+        console.error('Error updating employee role:', err);
+    }
 }
+
 
 // connect to the MySQL database and start the application
 connection.connect(err => {
     if (err) throw err;
     console.log('Connected to the database!');
     startApp();
-  });
+});

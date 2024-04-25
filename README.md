@@ -12,5 +12,6 @@ The purpose of this application is to allow users of a company to manage their e
 
 ## Demo video
 
+
 ## Link to GitHub repo
 https://github.com/Carlospetsdogs/Employee-tracker
