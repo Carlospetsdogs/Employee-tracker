@@ -117,7 +117,6 @@ function addDepartment() {
     });
 }
 
-
 // function to add a role
 function addRole() {
     prompt([
@@ -137,13 +136,26 @@ function addRole() {
             message: 'Enter the department ID for the role:'
         }
     ]).then(answers => {
+        // Validate input
+        if (!answers.title || !answers.salary || !answers.department_id) {
+            console.log('Please provide all required information.');
+            addRole(); // Prompt user again
+            return;
+        }
+
+        // Insert role into the database
         connection.query('INSERT INTO roles SET ?', answers, (err, res) => {
-            if (err) throw err;
+            if (err) {
+                console.error('Error adding role:', err);
+                addRole(); // Prompt user again
+                return;
+            }
             console.log('Role added successfully!');
             promptUser();
         });
     });
 }
+
 
 // function to add an employee 
 function addEmployee() {
