@@ -109,7 +109,7 @@ function addDepartment() {
         name: 'name',
         message: 'Enter the name of the department:'
     }).then(answer => {
-        connection.query('INSERT INTO departments SET ?', { name: answer.name }, (err, res) => {
+        connection.query('INSERT INTO department SET ?', { name: answer.name }, (err, res) => {
             if (err) throw err;
             console.log('Department added successfully!');
             promptUser();
@@ -144,7 +144,7 @@ function addRole() {
         }
 
         // Insert role into the database
-        connection.query('INSERT INTO roles SET ?', answers, (err, res) => {
+        connection.query('INSERT INTO role SET ?', answers, (err, res) => {
             if (err) {
                 console.error('Error adding role:', err);
                 addRole(); // Prompt user again
