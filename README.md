@@ -1,7 +1,8 @@
 # Employee Tracker
 
 ## Usage 
-The purpose of this application is to allow users of a company to manage their employees databases.
+The purpose of this application is to allow users of a company to manage their employees databases using the command line. Users will be able to 
+view employees, departments, salaries, managers and roles. They can also add employees, add departments and update roles.
 
 ## Installation
 -install inquirer: run `npm i inquirer@8.2.4`
